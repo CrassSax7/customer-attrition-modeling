@@ -1,0 +1,33 @@
+
+---
+
+# 📄 `run_analysis.R` (Main Entry Point)
+
+> ✅ **This is the single source of truth**
+> Employers should only have to run *this*.
+
+**Use exactly the all-purpose script I provided in the previous message.**  
+No edits needed.
+
+(You already have this — just save it as `run_analysis.R`.)
+
+---
+
+# 📄 `data/README.md`
+
+```markdown
+# Data Directory
+
+This directory contains the input dataset used for customer attrition modeling.
+
+## Files
+
+- `customer_data.csv`
+  - Customer-level banking data
+  - Includes demographic, transactional, and account behavior features
+  - Target variable: `Attrition_Flag`
+
+## Notes
+
+- Data is assumed to be pre-cleaned and anonymized
+- No personally identifiable information (PII) is included
