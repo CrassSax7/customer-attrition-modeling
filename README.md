@@ -61,6 +61,7 @@ highlighting nonlinear customer behavior patterns.
 ├── metrics/           # Model metrics & comparison tables
 └── output/            # Additional generated artifacts
 
+---
 
 ## How to Run
 ```bash
