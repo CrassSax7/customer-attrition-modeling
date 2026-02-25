@@ -3,8 +3,6 @@
 **Author:** J. Casey Brookshier  
 **Tools:** R, caret, pROC, randomForest, gbm
 
----
-
 ## 📌 Project Overview
 
 This project analyzes customer attrition using a real-world banking dataset.
@@ -61,7 +59,6 @@ highlighting nonlinear customer behavior patterns.
 ├── metrics/           # Model metrics & comparison tables
 └── output/            # Additional generated artifacts
 
----
 ---
 
 ## How to Run
