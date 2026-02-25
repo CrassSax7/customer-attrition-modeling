@@ -49,7 +49,7 @@ highlighting nonlinear customer behavior patterns.
 - Ensemble models capture complex interactions missed by linear approaches
 
 ---
-
+```markdown
 ## 📁 Repository Structure
 
 ```text
@@ -58,7 +58,7 @@ highlighting nonlinear customer behavior patterns.
 ├── figures/           # Saved plots and figures
 ├── metrics/           # Model metrics & comparison tables
 └── output/            # Additional generated artifacts
-
+```
 ---
 
 # How to Run
