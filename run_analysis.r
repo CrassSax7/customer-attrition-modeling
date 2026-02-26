@@ -1,12 +1,6 @@
 
 # Modeling Customer Attrition 
 
-
-# Global settings 
-  echo = TRUE, message = FALSE, warning = FALSE,
-  fig.width = 7, fig.height = 5
-)
-
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 set.seed(123)
 
