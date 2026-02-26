@@ -61,10 +61,23 @@ highlighting nonlinear customer behavior patterns.
 ```
 ---
 
-# How to Run
-```bash
-git clone git@github.com:CrassSax7/customer-attrition-modeling.git
-cd customer-attrition-modeling
-Rscript run_analysis.r
+## 🚀 How to Run (Mac - R must be installed)
 
+```bash
+git clone https://github.com/CrassSax7/customer-attrition-modeling.git
+cd customer-attrition-modeling
+
+Rscript run_analysis.r
+```
+
+---
+
+## 🚀 How to Run (Windows - R must be installed)
+
+```bash
+git clone https://github.com/CrassSax7/customer-attrition-modeling.git
+cd customer-attrition-modeling
+
+Rscript run_analysis.r
+```
 
