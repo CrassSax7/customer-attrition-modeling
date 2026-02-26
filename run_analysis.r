@@ -1,9 +1,8 @@
-# ===========================================================
-# Modeling Customer Attrition 
-# ===========================================================
 
-# ---- Global settings ----
-knitr::opts_chunk$set(
+# Modeling Customer Attrition 
+
+
+# Global settings 
   echo = TRUE, message = FALSE, warning = FALSE,
   fig.width = 7, fig.height = 5
 )
@@ -11,7 +10,7 @@ knitr::opts_chunk$set(
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 set.seed(123)
 
-# ---- Libraries ----
+# Libraries 
 suppressPackageStartupMessages({
   library(dplyr)
   library(caret)
@@ -27,7 +26,7 @@ suppressPackageStartupMessages({
   library(pdp)
 })
 
-# ---- Project paths  ----
+# Project paths 
 base_dir    <- getwd()
 data_dir    <- file.path(base_dir, "data")
 plot_dir    <- file.path(base_dir, "figures")
@@ -37,27 +36,27 @@ dir.create(data_dir, showWarnings = FALSE)
 dir.create(plot_dir, showWarnings = FALSE)
 dir.create(metrics_dir, showWarnings = FALSE)
 
-# ---- Load data ----
+# Load data
 data_path <- file.path(data_dir, "customer_data.csv")
 if (!file.exists(data_path)) {
   stop("❌ data/customer_data.csv not found. Add it to the repository.")
 }
 abc_customer <- read.csv(data_path, stringsAsFactors = FALSE)
 
-# ---- Basic inspection ----
+# Basic inspection 
 abc_customer$Attrition_Flag <- factor(
   abc_customer$Attrition_Flag,
   levels = c("Existing Customer", "Attrited Customer")
 )
 
-# ---- Train / test split (stratified) ----
+# Train / test split (stratified)
 train_idx <- createDataPartition(
   abc_customer$Attrition_Flag, p = 0.7, list = FALSE
 )
 train_set <- abc_customer[train_idx, ]
 test_set  <- abc_customer[-train_idx, ]
 
-# ---- Data cleaning function ----
+# Data cleaning function
 clean_data <- function(df, ref = NULL) {
   df <- df %>% mutate(across(where(is.character), as.factor))
   
@@ -84,7 +83,7 @@ clean_data <- function(df, ref = NULL) {
 train_set <- clean_data(train_set)
 test_set  <- clean_data(test_set, train_set)
 
-# ---- Binary target ----
+# Binary target
 train_set$Attrition_Flag_Num <- ifelse(
   train_set$Attrition_Flag == "Attrited Customer", 1, 0
 )
@@ -92,9 +91,8 @@ test_set$Attrition_Flag_Num <- ifelse(
   test_set$Attrition_Flag == "Attrited Customer", 1, 0
 )
 
-# ===========================================================
+
 # Logistic Regression
-# ===========================================================
 log_model <- glm(
   Attrition_Flag_Num ~ . -CLIENTNUM -Attrition_Flag,
   data = train_set, family = binomial
@@ -117,9 +115,8 @@ dev.off()
 # Save model
 saveRDS(log_model, file.path(metrics_dir, "logistic_model.rds"))
 
-# ===========================================================
+
 # Refined Logistic Regression
-# ===========================================================
 log_step <- step(log_model, trace = FALSE)
 ref_prob <- predict(log_step, test_set, type = "response")
 ref_pred <- factor(
@@ -136,9 +133,9 @@ dev.off()
 
 saveRDS(log_step, file.path(metrics_dir, "refined_logistic_model.rds"))
 
-# ===========================================================
+
 # KNN
-# ===========================================================
+
 X_train <- train_set %>% select(-Attrition_Flag, -Attrition_Flag_Num, -CLIENTNUM)
 X_test  <- test_set  %>% select(-Attrition_Flag, -Attrition_Flag_Num, -CLIENTNUM)
 
@@ -160,9 +157,7 @@ auc_knn <- auc(
       ifelse(knn_pred == "Attrited Customer", 1, 0))
 )
 
-# ===========================================================
 # Naive Bayes
-# ===========================================================
 nb_model <- naiveBayes(
   Attrition_Flag ~ .,
   data = train_set %>% select(-CLIENTNUM, -Attrition_Flag_Num)
@@ -176,9 +171,7 @@ accuracy_nb <- mean(nb_pred == test_set$Attrition_Flag)
 auc_nb <- auc(roc(test_set$Attrition_Flag_Num, nb_prob))
 saveRDS(nb_model, file.path(metrics_dir, "naive_bayes_model.rds"))
 
-# ===========================================================
 # Random Forest
-# ===========================================================
 rf_model <- randomForest(
   Attrition_Flag ~ .,
   data = train_set %>% select(-CLIENTNUM, -Attrition_Flag_Num),
@@ -197,9 +190,7 @@ dev.off()
 
 saveRDS(rf_model, file.path(metrics_dir, "random_forest_model.rds"))
 
-# ===========================================================
 # Gradient Boosting
-# ===========================================================
 gbm_model <- gbm(
   Attrition_Flag_Num ~ .,
   data = train_set %>% select(-CLIENTNUM, -Attrition_Flag),
@@ -229,9 +220,7 @@ if(length(num_features) > 1){
   dev.off()
 }
 
-# ===========================================================
 # Final comparison table & save
-# ===========================================================
 comparison <- data.frame(
   Model = c("Logistic", "Refined Logistic", "KNN", "Naive Bayes",
             "Random Forest", "Gradient Boosting"),
